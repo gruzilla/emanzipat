@@ -1,0 +1,36 @@
+{
+  "name": "emanzipat",
+  "version": "0.0.1",
+  "description": "Browser Based Decentralized Structured Data Exchange",
+  "main": "public/js/Emanzipat.js",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-es2015": "^6.24.1",
+    "webpack": "^4.8.2",
+    "webpack-cli": "^2.1.3"
+  },
+  "scripts": {
+    "build": "webpack --mode production",
+    "dev": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gruzilla/emanzipat.git"
+  },
+  "keywords": [
+    "Browser",
+    "Based",
+    "Decentralized",
+    "Structured",
+    "Data",
+    "Exchange"
+  ],
+  "author": "gruzilla",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/gruzilla/emanzipat/issues"
+  },
+  "homepage": "https://github.com/gruzilla/emanzipat#readme"
+}

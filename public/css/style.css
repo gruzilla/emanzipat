@@ -1,0 +1,52 @@
+html {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+body {
+    font-family: sans-serif;
+    height: 100%;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    background-color: aliceblue;
+}
+
+section#main.init, section#main.url {
+    height: 10vw;
+    width: 20vw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+section#main.url {
+    width: 60%;
+    height: 40%;
+    background-color: cadetblue;
+}
+
+section#emanzibar {
+    width: 100%;
+    border-bottom: 1px solid darkgray;
+    text-align: center;
+}
+
+section#emanzibar .buttons {
+    width: 80%;
+    text-align: right;
+    padding: 2vh 2vw;
+}
+
+button {
+    border-radius: 0.3em;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    font-size: 1.3em;
+    padding: 0.3em;
+}
+
+section#emanzibar .buttons button {
+    margin-left: 2vw;
+}

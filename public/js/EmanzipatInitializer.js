@@ -1,4 +1,6 @@
-import UrlSilo from './silos/UrlSilo.js';
+"use strict";
+
+/* global console, crypto */
 
 export default class EmanzipatInitalizer {
 
@@ -23,26 +25,27 @@ export default class EmanzipatInitalizer {
             return;
         }
 
-        if (!this.data.hasOwnProperty('d') || !this.data.hasOwnProperty('s')
-            || !this.data.d.hasOwnProperty('l') || !this.data.d.hasOwnProperty('v')
-            || !this.data.d.hasOwnProperty('id')
+        if (!this.data.hasOwnProperty('d') || !this.data.hasOwnProperty('s') ||
+            !this.data.d.hasOwnProperty('l') || !this.data.d.hasOwnProperty('v') ||
+            !this.data.d.hasOwnProperty('id')
         ) {
-            console.error('https://github.com/gruzilla/emanzipat/blob/master/codes.md#silo.invalid', e);
+            console.error('https://github.com/gruzilla/emanzipat/blob/master/codes.md#silo.invalid');
             this.valid = false;
         }
 
         this.valid = true;
     }
 
-    static getInitializationUrl() {
+    static getInitializationUrl(name, settings) {
         let id = EmanzipatInitalizer.generateId();
 
         console.info('https://github.com/gruzilla/emanzipat/blob/master/codes.md#initialized');
+        console.debug(id, name, settings);
         return '/silo/' + id + '/' + encodeURIComponent(JSON.stringify(
             this.wrapSettings(
                 id,
-                UrlSilo.NAME,
-                UrlSilo.DEFAULT_SETTINGS
+                name,
+                settings
             )
         ));
     }
@@ -62,7 +65,7 @@ export default class EmanzipatInitalizer {
         // https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
         return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
             (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-        )
+        );
     }
 
     static wrapSettings(id, name, settings) {
@@ -94,4 +97,4 @@ export default class EmanzipatInitalizer {
 }
 
 EmanzipatInitalizer.VERSION = 0;
-EmanzipatInitalizer.URL_PATTERN = /\/silo\/([^/]+)\/([^/]+)/u;
+EmanzipatInitalizer.URL_PATTERN = /\/silo\/([^/]+)\/([^/]+)/i;

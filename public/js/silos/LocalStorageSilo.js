@@ -8,7 +8,7 @@ export default class LocalStorageSilo {
     }
 
     render() {
-        let data = document.localStorage.getItem(this.id);
+        let data = localStorage.getItem(this.id);
         if (!data) {
             data = LocalStorageSilo.DEFAULT_DATA;
         }
@@ -16,7 +16,7 @@ export default class LocalStorageSilo {
     }
 
     save() {
-        document.localStorage.setItem(
+        localStorage.setItem(
             this.id,
             document.getElementById('urlSiloData').innerHTML
         );
@@ -35,6 +35,6 @@ export default class LocalStorageSilo {
     }
 }
 
-LocalStorageSilo.NAME = 'url';
+LocalStorageSilo.NAME = 'localStorage';
 LocalStorageSilo.DEFAULT_SETTINGS = {};
 LocalStorageSilo.DEFAULT_DATA = '拜托, chänge moi (:';

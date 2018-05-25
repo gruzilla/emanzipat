@@ -1,5 +1,10 @@
+"use strict";
+
+/* global console */
+
 import EmanzipatInitializer from './EmanzipatInitializer.js';
 import UrlSilo from './silos/UrlSilo.js';
+import LocalStorageSilo from './silos/LocalStorageSilo.js';
 import EmanziBar from './EmanziBar.js';
 
 export default class Emanzipat {
@@ -27,24 +32,44 @@ export default class Emanzipat {
         let ele = document.getElementById(this.contentId);
         ele.innerHTML = '<h1>welcome to emanzip.at</h1>' +
             '<p><a href="https://github.com/gruzilla/emanzipat">read me</a>' +
-            '<p><button id="createSilo">create new silo</button></p>';
+            '<p><button id="createUrlSilo">create new URL silo</button></p>' +
+            '<p><button id="createLocalStorageSilo">create new LocalStorage silo</button></p>';
         ele.classList.add('init');
-        document.getElementById('createSilo').addEventListener(
+        document.getElementById('createUrlSilo').addEventListener(
             'click',
-            Emanzipat.createSilo
+            function () {Emanzipat.createSilo('url');}
+        );
+        document.getElementById('createLocalStorageSilo').addEventListener(
+            'click',
+            function () {console.log('blub!');Emanzipat.createSilo('localStorage');}
         );
     }
 
-    static createSilo() {
-        window.location.href = EmanzipatInitializer.getInitializationUrl();
-    };
+    static createSilo(loaderName) {
+        switch(loaderName) {
+            case 'localStorage':
+                window.location.href = EmanzipatInitializer.getInitializationUrl(
+                    LocalStorageSilo.NAME,
+                    LocalStorageSilo.DEFAULT_SETTINGS
+                );
+                break;
+            default:
+                window.location.href = EmanzipatInitializer.getInitializationUrl(
+                    UrlSilo.NAME,
+                    UrlSilo.DEFAULT_SETTINGS
+                );
+                break;
+        }
+    }
 
     loadSilo(loaderName, id, settings) {
         this.silo = null;
         // TODO: use strategy pattern instead of switch
         switch(loaderName) {
             // TODO: implement additional silo-loaders
-            case 'url':
+            case 'localStorage':
+                this.silo = new LocalStorageSilo(id, settings);
+                break;
             default:
                 // per default the UrlSilo is used
                 this.silo = new UrlSilo(id, settings);

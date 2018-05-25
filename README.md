@@ -49,3 +49,7 @@ the JavaScript console, when using [emanzip.at].
 [emanzip.at]: https://emanzip.at
 [glossary.md]: glossary.md
 [codes.md]: codes.md
+
+### dev infos
+
+See [DEVELOP.md](DEVELOP.md) for how to get started developing and running emanzip.at locally.

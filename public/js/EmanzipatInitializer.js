@@ -41,7 +41,7 @@ export default class EmanzipatInitalizer {
 
         console.info('https://github.com/gruzilla/emanzipat/blob/master/codes.md#initialized');
         console.debug(id, name, settings);
-        return '/silo/' + id + '/' + encodeURIComponent(JSON.stringify(
+        return '/silo/' + id + '/' + EmanzipatInitalizer.b64EncodeUnicode(JSON.stringify(
             this.wrapSettings(
                 id,
                 name,
@@ -52,7 +52,7 @@ export default class EmanzipatInitalizer {
 
     static getUrl(silo) {
         console.info('https://github.com/gruzilla/emanzipat/blob/master/codes.md#updated');
-        return '/silo/' + silo.getId() + '/' + encodeURIComponent(JSON.stringify(
+        return '/silo/' + silo.getId() + '/' + EmanzipatInitalizer.b64EncodeUnicode(JSON.stringify(
             this.wrapSettings(
                 silo.getId(),
                 silo.getName(),
@@ -66,6 +66,41 @@ export default class EmanzipatInitalizer {
         return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
             (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
         );
+    }
+
+    /**
+     * very unhappy with this atm, because it is me who decides which encoding
+     * is used for storage. this is not democratic at all
+     * also very unhappy that IE does not support TextEncoding yet
+     * and then again very unhappy that TextEncoding does not support other encodings
+     * but utf-8 and even recently droped utf-16 support... what a world are we living in?
+     *
+     * https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_Unicode_Problem
+     */
+    static b64EncodeUnicode(str) {
+        // first we use encodeURIComponent to get percent-encoded UTF-8,
+        // then we convert the percent encodings into raw bytes which
+        // can be fed into btoa.
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+            function toSolidBytes(match, p1) {
+                return String.fromCharCode('0x' + p1);
+        }));
+    }
+
+    /**
+     * very unhappy with this atm, because it is me who decides which encoding
+     * is used for storage. this is not democratic at all
+     * also very unhappy that IE does not support TextEncoding yet
+     * and then again very unhappy that TextEncoding does not support other encodings
+     * but utf-8 and even recently droped utf-16 support... what a world are we living in?
+     *
+     * https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_Unicode_Problem
+     */
+    static b64DecodeUnicode(str) {
+        // Going backwards: from bytestream, to percent-encoding, to original string.
+        return decodeURIComponent(atob(str).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
     }
 
     static wrapSettings(id, name, settings) {

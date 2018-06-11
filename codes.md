@@ -33,10 +33,10 @@ compliant with the current emanzip.at data structure:
         }
     }
 
-## urlSilo.noData
+## urlStorage.noData
 
-the UrlSilo was initialized with an invalid settings-json-object. Make
-sure the UrlSilo is initialized with an object looking like this:
+the UrlStorage was initialized with an invalid settings-json-object. Make
+sure the UrlStorage is initialized with an object looking like this:
 
     {
         "d": "<b>some</b> html"

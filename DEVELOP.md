@@ -33,6 +33,7 @@ now you can open http://localhost:8000
     npm run build
     git add public
     git commit -m "new version"
+    git push
     git tag "new version"
     git push --tags
 

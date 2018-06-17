@@ -2,12 +2,13 @@
 
 A browser based decentralized structured data exchange platform.
 
-### basic usage of url-silo:
+### basic usage of free-text-silo:
 
 no other silos are currently implemented.
 
 * visit [emanzip.at]
 * create a new information silo by clicking the big button
+* choose where you want to store the information
 * change the text in the block
 * copy the url and send it to somebody you want to share data with
 
@@ -30,6 +31,12 @@ Freedoms in danger that [emanzip.at] tries to reestablish:
 5. Freedom of choosing data transportation tunnels
    = i choose, which hard- and software tunnels are used to transport my
    data
+
+### criticism, findings and decisions
+
+Every software development includes decisions.
+While emanzip.at tries to take as little decisions as possible and leave as many decisions as possible up to the end user, issues have come up.
+Those issues are documented in [findings.md].
 
 ### glossary
 

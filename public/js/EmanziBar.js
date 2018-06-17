@@ -1,10 +1,13 @@
+"use strict";
+
 import EmanzipatInitalizer from './EmanzipatInitializer.js';
 
 export default class Emanzibar {
 
-    constructor(barId, silo) {
+    constructor(barId, silo, storage) {
         this.barId = barId;
         this.silo = silo;
+        this.storage = storage;
 
         this.render();
     }
@@ -28,12 +31,12 @@ export default class Emanzibar {
     }
 
     save() {
-        this.silo.save(); // TODO make this async
+        this.silo.save();
         window.location.href = EmanzipatInitalizer.getUrl(this.silo);
     }
 
     new() {
-        window.location.href = EmanzipatInitalizer.getInitializationUrl();
+        window.location.href = window.location.origin;
     }
 
     // TODO: implement change listener and show that data has changed

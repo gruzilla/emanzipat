@@ -10,11 +10,11 @@ export default class FreeTextSilo {
 
     render() {
         let data = this.storage.load();
-        return '<div id="urlSiloData" contenteditable="true">' + data + '</div>';
+        return '<div id="FreeTextSilo" contenteditable="true">' + data + '</div>';
     }
 
     save() {
-        this.storage.save(document.getElementById('urlSiloData').innerHTML);
+        this.storage.save(document.getElementById('FreeTextSilo').innerHTML);
     }
 
     getId() {

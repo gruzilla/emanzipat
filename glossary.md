@@ -67,5 +67,6 @@ TODO
 * implement signed silos (enabling freedom of trust authority)
 * implement encrypted silos (enabling freedom of obscurity)
 * implement silo-collaboration (enabling freedom of synchronicity)
-* think about silo-settings-storage solution (creating a shitty#
+* implement a "way-back-machine" that allows to migrate old silos
+* think about silo-settings-storage solution (creating a shitty
   centralized data-storage for "i have no time"-people)

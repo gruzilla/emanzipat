@@ -2,14 +2,14 @@
 
 /* global console, crypto */
 
-export default class EmanzipatInitalizer {
+export default class EmanzipatInitializer {
 
     constructor() {
         this.valid = false;
         this.id = null;
         this.data = null;
 
-        let [, id, data] = window.location.href.match(EmanzipatInitalizer.URL_PATTERN) || [];
+        let [, id, data] = window.location.href.match(EmanzipatInitializer.URL_PATTERN) || [];
 
         if (typeof(id) === 'undefined' || typeof(data) === 'undefined') {
             this.valid = false;
@@ -18,10 +18,11 @@ export default class EmanzipatInitalizer {
 
         this.id = id;
         try {
-            this.data = JSON.parse(decodeURIComponent(data));
+            this.data = JSON.parse(EmanzipatInitializer.b64DecodeUnicode(data));
         } catch (e) {
             console.error('https://github.com/gruzilla/emanzipat/blob/master/codes.md#silo.invalid', e);
             this.valid = false;
+            console.debug(data);
             return;
         }
 
@@ -31,17 +32,24 @@ export default class EmanzipatInitalizer {
         ) {
             console.error('https://github.com/gruzilla/emanzipat/blob/master/codes.md#silo.invalid');
             this.valid = false;
+            return;
+        }
+
+        if (this.data.d.v < EmanzipatInitializer.VERSION) {
+            console.error('https://github.com/gruzilla/emanzipat/blob/master/codes.md#silo.version');
+            this.valid = false;
+            return;
         }
 
         this.valid = true;
     }
 
     static getInitializationUrl(name, settings) {
-        let id = EmanzipatInitalizer.generateId();
+        let id = EmanzipatInitializer.generateId();
 
         console.info('https://github.com/gruzilla/emanzipat/blob/master/codes.md#initialized');
         console.debug(id, name, settings);
-        return '/silo/' + id + '/' + EmanzipatInitalizer.b64EncodeUnicode(JSON.stringify(
+        return '/silo/' + id + '/' + EmanzipatInitializer.b64EncodeUnicode(JSON.stringify(
             this.wrapSettings(
                 id,
                 name,
@@ -52,7 +60,7 @@ export default class EmanzipatInitalizer {
 
     static getUrl(silo) {
         console.info('https://github.com/gruzilla/emanzipat/blob/master/codes.md#updated');
-        return '/silo/' + silo.getId() + '/' + EmanzipatInitalizer.b64EncodeUnicode(JSON.stringify(
+        return '/silo/' + silo.getId() + '/' + EmanzipatInitializer.b64EncodeUnicode(JSON.stringify(
             this.wrapSettings(
                 silo.getId(),
                 silo.getName(),
@@ -74,6 +82,7 @@ export default class EmanzipatInitalizer {
      * also very unhappy that IE does not support TextEncoding yet
      * and then again very unhappy that TextEncoding does not support other encodings
      * but utf-8 and even recently droped utf-16 support... what a world are we living in?
+     * read more in the findings: https://github.com/gruzilla/emanzipat/blob/master/findings.md
      *
      * https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_Unicode_Problem
      */
@@ -106,9 +115,9 @@ export default class EmanzipatInitalizer {
     static wrapSettings(id, name, settings) {
         return {
             d: { // data required by EmanzipatInitializer to create a silo
-                v: EmanzipatInitalizer.VERSION, // Emanzipat data version
+                v: EmanzipatInitializer.VERSION, // Emanzipat data version
                 id: id,                         // the randomly generated silo ID
-                l: name                         // name of the silo handler
+                l: name,                        // name of the silo handler
             },
             s: settings                     // silo settings
         };
@@ -131,5 +140,5 @@ export default class EmanzipatInitalizer {
     }
 }
 
-EmanzipatInitalizer.VERSION = 0;
-EmanzipatInitalizer.URL_PATTERN = /\/silo\/([^/]+)\/([^/]+)/i;
+EmanzipatInitializer.VERSION = 1;
+EmanzipatInitializer.URL_PATTERN = /\/silo\/([^/]+)\/([^/]+)/i;

@@ -3,16 +3,21 @@
 /* global console */
 
 export default class Settings {
-    constructor(data) {
-        this.data = data;
+    constructor(id, siloSettings) {
+        this.id = id;
+        this.settings = siloSettings;
     }
 
     load() {
-        if (!this.data.hasOwnProperty('d')) {
+        if (!this.settings.hasOwnProperty('d')) {
             console.error('https://github.com/gruzilla/emanzipat/blob/master/codes.md#urlStorage.noData');
             return 'ERROR. See console.';
         }
-        return this.data.d;
+        return this.settings.d;
+    }
+
+    isEmpty() {
+        return !this.settings.hasOwnProperty('d') || this.settings.d === null;
     }
 
     save(data) {

@@ -2,14 +2,14 @@
 
 /* global console, crypto */
 
-export default class EmanzipatInitalizer {
+export default class EmanzipatInitializer {
 
     constructor() {
         this.valid = false;
         this.id = null;
         this.data = null;
 
-        let [, id, data] = window.location.href.match(EmanzipatInitalizer.URL_PATTERN) || [];
+        let [, id, data] = window.location.href.match(EmanzipatInitializer.URL_PATTERN) || [];
 
         if (typeof(id) === 'undefined' || typeof(data) === 'undefined') {
             this.valid = false;
@@ -18,10 +18,11 @@ export default class EmanzipatInitalizer {
 
         this.id = id;
         try {
-            this.data = JSON.parse(decodeURIComponent(data));
+            this.data = JSON.parse(EmanzipatInitializer.b64DecodeUnicode(data));
         } catch (e) {
             console.error('https://github.com/gruzilla/emanzipat/blob/master/codes.md#silo.invalid', e);
             this.valid = false;
+            console.debug(data);
             return;
         }
 
@@ -31,17 +32,24 @@ export default class EmanzipatInitalizer {
         ) {
             console.error('https://github.com/gruzilla/emanzipat/blob/master/codes.md#silo.invalid');
             this.valid = false;
+            return;
+        }
+
+        if (this.data.d.v < EmanzipatInitializer.VERSION) {
+            console.error('https://github.com/gruzilla/emanzipat/blob/master/codes.md#silo.version');
+            this.valid = false;
+            return;
         }
 
         this.valid = true;
     }
 
     static getInitializationUrl(name, settings) {
-        let id = EmanzipatInitalizer.generateId();
+        let id = EmanzipatInitializer.generateId();
 
         console.info('https://github.com/gruzilla/emanzipat/blob/master/codes.md#initialized');
         console.debug(id, name, settings);
-        return '/silo/' + id + '/' + encodeURIComponent(JSON.stringify(
+        return '/silo/' + id + '/' + EmanzipatInitializer.b64EncodeUnicode(JSON.stringify(
             this.wrapSettings(
                 id,
                 name,
@@ -52,7 +60,7 @@ export default class EmanzipatInitalizer {
 
     static getUrl(silo) {
         console.info('https://github.com/gruzilla/emanzipat/blob/master/codes.md#updated');
-        return '/silo/' + silo.getId() + '/' + encodeURIComponent(JSON.stringify(
+        return '/silo/' + silo.getId() + '/' + EmanzipatInitializer.b64EncodeUnicode(JSON.stringify(
             this.wrapSettings(
                 silo.getId(),
                 silo.getName(),
@@ -68,12 +76,48 @@ export default class EmanzipatInitalizer {
         );
     }
 
+    /**
+     * very unhappy with this atm, because it is me who decides which encoding
+     * is used for storage. this is not democratic at all
+     * also very unhappy that IE does not support TextEncoding yet
+     * and then again very unhappy that TextEncoding does not support other encodings
+     * but utf-8 and even recently droped utf-16 support... what a world are we living in?
+     * read more in the findings: https://github.com/gruzilla/emanzipat/blob/master/findings.md
+     *
+     * https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_Unicode_Problem
+     */
+    static b64EncodeUnicode(str) {
+        // first we use encodeURIComponent to get percent-encoded UTF-8,
+        // then we convert the percent encodings into raw bytes which
+        // can be fed into btoa.
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+            function toSolidBytes(match, p1) {
+                return String.fromCharCode('0x' + p1);
+        }));
+    }
+
+    /**
+     * very unhappy with this atm, because it is me who decides which encoding
+     * is used for storage. this is not democratic at all
+     * also very unhappy that IE does not support TextEncoding yet
+     * and then again very unhappy that TextEncoding does not support other encodings
+     * but utf-8 and even recently droped utf-16 support... what a world are we living in?
+     *
+     * https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_Unicode_Problem
+     */
+    static b64DecodeUnicode(str) {
+        // Going backwards: from bytestream, to percent-encoding, to original string.
+        return decodeURIComponent(atob(str).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    }
+
     static wrapSettings(id, name, settings) {
         return {
             d: { // data required by EmanzipatInitializer to create a silo
-                v: EmanzipatInitalizer.VERSION, // Emanzipat data version
+                v: EmanzipatInitializer.VERSION, // Emanzipat data version
                 id: id,                         // the randomly generated silo ID
-                l: name                         // name of the silo handler
+                l: name,                        // name of the silo handler
             },
             s: settings                     // silo settings
         };
@@ -96,5 +140,5 @@ export default class EmanzipatInitalizer {
     }
 }
 
-EmanzipatInitalizer.VERSION = 0;
-EmanzipatInitalizer.URL_PATTERN = /\/silo\/([^/]+)\/([^/]+)/i;
+EmanzipatInitializer.VERSION = 1;
+EmanzipatInitializer.URL_PATTERN = /\/silo\/([^/]+)\/([^/]+)/i;

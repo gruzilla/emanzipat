@@ -26,3 +26,19 @@ With the following command a local http server is started on (default) port 8000
     npm run serve
 
 now you can open http://localhost:8000
+
+# deployment
+
+    nvm use
+    npm run build
+    git add public
+    git commit -m "new version"
+    git push
+    git tag "new version"
+    git push --tags
+
+# delivery
+
+    ssh abendstille.at
+    cd applications/emanzip.at
+    make update

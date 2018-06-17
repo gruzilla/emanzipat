@@ -23,20 +23,31 @@ compliant with the current emanzip.at data structure:
     {
         // data required by EmanzipatInitializer to create a silo
         "d": {
-            "v": 0,     // Emanzipat data version
-            "id": "0",  // a globally unique ID for your silo
-            "l": "url"  // name of the silo handler
+            "v": 0,          // Emanzipat data version
+            "id": "0",       // a globally unique ID for your silo
+            "l": "freeText"  // name of the silo loader
         },
-        // data required by a silo to render the data
+        // data required by a silo to manage and render the data
         "s": {
-            "d": "拜托, chänge moi (:"
+            "s": "url",                 // name of storage backend
+            "d": "拜托, chänge moi (:"  // arbitrary data
         }
     }
 
-## urlSilo.noData
+## silo.noStorageBackend
 
-the UrlSilo was initialized with an invalid settings-json-object. Make
-sure the UrlSilo is initialized with an object looking like this:
+
+
+## silo.version
+
+It is possible that you have an old silo lying around somewhere and try to load it with the current version of emanzip.at.
+That does not work, because I am a single developer, and I currently can not provide the resources to implement the migration use case.
+However, no worries, the silos data is not lost and I am working on a "way-back-machine".
+
+## urlStorage.noData
+
+the UrlStorage was initialized with an invalid settings-json-object. Make
+sure the UrlStorage is initialized with an object looking like this:
 
     {
         "d": "<b>some</b> html"

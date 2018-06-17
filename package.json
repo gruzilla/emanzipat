@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build": "webpack --mode production",
-    "dev": "webpack --watch",
+    "dev": "webpack --mode development --watch",
     "serve": "ws --directory public --rewrite '/silo/* -> index.html'"
   },
   "repository": {

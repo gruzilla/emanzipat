@@ -53,10 +53,13 @@ reasons.
 The [codes.md] list tries to explain all the log entries you can see in
 the JavaScript console, when using [emanzip.at].
 
+### dev infos
+
+See [DEVELOP.md] for how to get started developing and running emanzip.at locally.
+
+
+[DEVELOP.md]: DEVELOP.md
 [emanzip.at]: https://emanzip.at
 [glossary.md]: glossary.md
 [codes.md]: codes.md
-
-### dev infos
-
-See [DEVELOP.md](DEVELOP.md) for how to get started developing and running emanzip.at locally.
+[findings.md]: findings.md

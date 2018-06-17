@@ -53,3 +53,7 @@ button {
 section#emanzibar .buttons button {
     margin-left: 2vw;
 }
+
+p {
+    margin: 0.5em 0;
+}
